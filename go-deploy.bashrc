@@ -10,7 +10,9 @@ function _traverse() {
          continue
       fi;
       if [ -z "${PTH##*$2*}" ];  then
+        if [ -f "${PTH}/deploy.txt" ]; then
           echo "${PTH}"
+        fi
           continue
       fi
       _traverse "${PTH}" ${2}
@@ -38,14 +40,10 @@ function go-deploy() {
          count=0
          # search in path's for given project name
          PROJECTS=`_traverse "${_PATH}/src" "${1}"`
-         PROJECT=""
          #how many project we found
          for project in  $PROJECTS; do
            # do we have a deploy.txt in project root?
-           if [ -f "${project}/deploy.txt" ]; then
              count=$(( $count + 1 ))
-             PROJECT="${project}"
-           fi;
          done;
 
         # more than one project in same gopath than we have a conflict
@@ -55,7 +53,7 @@ function go-deploy() {
            return -1
         fi;
 
-        if [[ $count -eq 0 ||  -z $PROJECT ]]; then
+        if [[ $count -eq 0 ||  -z $PROJECTS ]]; then
           echo "${1} is not found in GOPATH envs, make sure you have deploy.txt in your project root"
           return -1
         fi
@@ -67,7 +65,7 @@ function go-deploy() {
             echo "We got error while executing ${line}"
             return -1
           fi;
-        done < "${PROJECT}/deploy.txt";
+        done < "${PROJECTS}/deploy.txt";
         return 0
        done
      done <<< $GOPATH
