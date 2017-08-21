@@ -4,6 +4,23 @@ This repo contains my usefull scripts for bashrc for simple needs like activate 
 
 If you have useful .bashrc functions let me know
 
+
+# Installtion
+
+first clone repo into `~/.bashrc.d` directory
+and then edit your ~/.bashrc with your favorite editor and these lines
+
+`git clone http://github.com/selam/oh-my-bashrc ~/.bashrc.d`
+
+```bash
+if [ -e ~/.bashrc.d ]; then
+	for BASHRC in ~/.bashrc.d/*.bashrc; do
+	   source ${BASHRC}
+	done
+fi
+```
+
+
 # Available commands/shortcuts
 
 `go-deploy`
